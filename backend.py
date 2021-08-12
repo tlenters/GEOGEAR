@@ -1,15 +1,9 @@
-import geopandas as gpd
-from .functions import grid, coverages, resample, presence_absence
+from functions import coverages, resample, presence_absence
 import os
 from prov.dot import prov_to_dot
-import graphviz
-from PIL import Image
-from tqdm.notebook import tqdm
 from prov.model import ProvDocument
-import prov.model
 
-
-def analysis(mask, cellsize, projection, layers_dict, grd_doc, path, prov):
+def analysis(projection, layers_dict, grd_json, path, prov):
 
     docs = []
 
@@ -17,25 +11,25 @@ def analysis(mask, cellsize, projection, layers_dict, grd_doc, path, prov):
 
         if i == "presence_absence":
             layers = []
-            urls = []
             for j in layers_dict[i]:
                 layers.append(list(j.items())[0])
             docs.append(presence_absence(layers, projection, path))
 
         elif i == "coverages":
             layers = []
-            urls = []
             for j in layers_dict[i]:
                 layers.append(list(j.items())[0])
             docs.append(coverages(layers, projection, path))
 
         elif i == "resample":
             layers = []
-            urls = []
             for j in layers_dict[i]:
                 layers.append(list(j.items())[0])
             docs.append(resample(layers, projection, path))
 
+            
+    grd_doc = ProvDocument.deserialize(content=grd_json)
+    
     for i in docs:
         grd_doc.update(i)
     
@@ -44,9 +38,9 @@ def analysis(mask, cellsize, projection, layers_dict, grd_doc, path, prov):
 
     for i in list(prov):
         if i in ["PNG","PDF"]:
-            dot = prov_to_dot(grd_doc)
+            dot = prov_to_dot(grd_doc, direction="BT")
             if i == "PNG":
-                dot.write_png(path + '/output/provenance/GEOGEAR-prov.png')
+                dot.write(path + '/output/provenance/GEOGEAR-prov.png', format='png')
             else:
                 dot.write_pdf(path + '/output/provenance/GEOGEAR-prov.pdf', )
         elif i == "JSON":
