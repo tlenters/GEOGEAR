@@ -1,19 +1,14 @@
 import os
 import pandas as pd
-import shutil
 import fnmatch
 from prov.model import ProvDocument
 import prov.model
 import glob
-import contextlib
-import logging
 from tqdm.notebook import tqdm
 from time import time
 from datetime import datetime
-import pyproj
 import geopandas as gpd
 import rasterio
-import copy
 from google_drive_downloader import GoogleDriveDownloader as gdd
 
 saga_cmd = "saga_cmd"
