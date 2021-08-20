@@ -1,4 +1,4 @@
-from functions import coverages, resample, presence_absence
+from geogear.functions import coverages, resample, presence_absence
 import os
 from prov.dot import prov_to_dot
 from prov.model import ProvDocument
